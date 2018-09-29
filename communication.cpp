@@ -63,7 +63,7 @@ void Communication::sendToPropeller(QString s)
 	}
 	else
 	{
-		qDebug()<<"propeller port did not open";
+//		qDebug()<<"propeller port did not open";
 	}
 }
 
@@ -89,7 +89,7 @@ void Communication::sendToLEDArduino(QString s)
 	}
 	else
 	{
-		qDebug()<<"LED arduino port did not open";
+//		qDebug()<<"LED arduino port did not open";
 	}
 }
 

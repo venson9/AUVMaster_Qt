@@ -38,7 +38,7 @@ double median(double *p, int a)
 }
 
 
-/*带符号的角度差值计算函数
+/*带符号的角度差值计算函数 -180 ~ 180
 * 参数：参数2为基准，向右为正，向左为负
 * 返回：带符号的角度差值*/
 double signedDeltaAngle(double tgt, double base)

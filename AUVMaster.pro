@@ -8,6 +8,8 @@ QT       += core gui
 QT += serialport
 QT += charts
 
+CONFIG += C++11
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = AUVMaster
@@ -30,7 +32,8 @@ SOURCES += main.cpp\
     task_light.cpp \
     vision.cpp \
     funcs.cpp \
-    task_color.cpp
+    task_color.cpp \
+    task_test.cpp
 
 HEADERS  += mainwindow.h \
     controlpane.h \
@@ -50,7 +53,11 @@ HEADERS  += mainwindow.h \
     task_light.h \
     vision.h \
     funcs.h \
-    task_color.h
+    task_color.h \
+    Digraph.hpp \
+    DigraphNode.hpp \
+    DigraphArc.hpp \
+    task_test.h
 
 FORMS    += mainwindow.ui \
     controlpane.ui

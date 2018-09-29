@@ -10,6 +10,14 @@
 #include <QPointer>
 #include <QThread>
 
+/* 添加任务的方法：
+ * 编写好任务类
+ * 在controlpane.cpp中include相应的类头文件
+ * 在ControlPane构造函数中为任务列表添加任务类的taskName静态成员变量
+ * 在controlpane.cpp中的taskPointer函数中添加if分支：if(Task_Test::taskName == taskName){ .. }
+ * 以上。
+*/
+
 namespace Ui {
 class ControlPane;
 }
@@ -119,8 +127,6 @@ private slots:
 	void on_btnDelCurChoosenItem_clicked();
 	void on_btnAutoControl_clicked(bool checked);
 	void on_ChoosenTaskList_doubleClicked(const QModelIndex &index);
-
-
 	void on_btnAbandonTask_clicked();
 
 protected:

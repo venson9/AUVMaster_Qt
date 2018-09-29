@@ -5,6 +5,7 @@
 #include "task_cruise.h"
 #include "task_light.h"
 #include "task_color.h"
+#include "task_test.h"
 #include "vision.h"
 #include <QDateTime>
 #include <QMessageBox>
@@ -49,6 +50,7 @@ ControlPane::ControlPane(QWidget *parent) :
 	ui->taskList->addItem(Task_Cruise::taskName);
 	ui->taskList->addItem(Task_Light::taskName);
 	ui->taskList->addItem(Task_Color::taskName);
+	ui->taskList->addItem(Task_Test::taskName);
 	ui->taskList->setCurrentRow(0);
 }
 
@@ -182,6 +184,9 @@ QPointer<Task> ControlPane::taskPointer(QString taskName)
 		}else if(Task_Color::taskName == taskName)
 		{
 			p = new Task_Color(100);
+		}else if(Task_Test::taskName == taskName)
+		{
+			p = new Task_Test(10000);
 		}
 	}
 	catch (const std::bad_alloc& e)
@@ -866,6 +871,7 @@ void ControlPane::on_btnPushIntoTaskStack_clicked()
 		unsigned listCnt = ui->ChoosenTaskList->count();
 		QString taskName = ui->taskList->currentItem()->text();
 		ui->ChoosenTaskList->insertItem(listCnt, taskName);
+		ui->ChoosenTaskList->setCurrentRow(0);
 		addTaskToList(taskName);
 	}
 }
