@@ -54,7 +54,6 @@ void Task_Test::taskSetUp()
 	taskTgt.addArc("test3", "test0", "3to0", 0, true);
 	taskTgt.addArc("test4", "test1", "4to1", 0, true);
 	//执行第一个任务目标函数
-	srand((unsigned int)time(0));
 	bool isWait = true;
 	do
 	{

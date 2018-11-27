@@ -13,12 +13,12 @@ Communication::~Communication()
 {
 	if (propellerPort->isOpen())
 		propellerPort->deleteLater();
-	if (switchArduinoPort->isOpen())
-		switchArduinoPort->deleteLater();
-	if (LEDArduinoPort->isOpen())
-		LEDArduinoPort->deleteLater();
-	if (depthSensorPort->isOpen())
-		depthSensorPort->deleteLater();
+	if (switchPort->isOpen())
+		switchPort->deleteLater();
+	if (LEDPort->isOpen())
+		LEDPort->deleteLater();
+	if (depthPort->isOpen())
+		depthPort->deleteLater();
 	if (postureSensorPort->isOpen())
 		postureSensorPort->deleteLater();
 
@@ -29,15 +29,15 @@ Communication::~Communication()
 void Communication::create()
 {
 	propellerPort = new QSerialPort;
-	switchArduinoPort = new QSerialPort;
-	LEDArduinoPort = new QSerialPort;
-	depthSensorPort = new QSerialPort;
+	switchPort = new QSerialPort;
+	LEDPort = new QSerialPort;
+	depthPort = new QSerialPort;
 	postureSensorPort = new QSerialPort;
 
 	openPropellerPort();
-	openSwitchArduinoPort();
-	openLEDArduinoPort();
-	openDepthSensorPort();
+	openSwitchPort();
+	openLEDPort();
+	openDepthPort();
 	openPostureSensorPort();
 
 	sendToSwitchArduino("D8@0#");
@@ -70,9 +70,9 @@ void Communication::sendToPropeller(QString s)
 void Communication::sendToSwitchArduino(QString s)
 {
 	QByteArray ba = s.toLatin1();
-	if(switchArduinoPort && switchArduinoPort->isOpen())
+	if(switchPort && switchPort->isOpen())
 	{
-		switchArduinoPort->write(ba);
+		switchPort->write(ba);
 	}
 	else
 	{
@@ -83,9 +83,9 @@ void Communication::sendToSwitchArduino(QString s)
 void Communication::sendToLEDArduino(QString s)
 {
 	QByteArray ba = s.toLatin1();
-	if(LEDArduinoPort && LEDArduinoPort->isOpen())
+	if(LEDPort && LEDPort->isOpen())
 	{
-		LEDArduinoPort->write(ba);
+		LEDPort->write(ba);
 	}
 	else
 	{
@@ -96,9 +96,9 @@ void Communication::sendToLEDArduino(QString s)
 void Communication::sendToDepthSensor(QString s)
 {
 	QByteArray ba = s.toLatin1();
-	if(depthSensorPort && depthSensorPort->isOpen())
+	if(depthPort && depthPort->isOpen())
 	{
-		depthSensorPort->write(ba);
+		depthPort->write(ba);
 	}
 	else
 	{
@@ -123,7 +123,7 @@ bool Communication::openPropellerPort()
 	}
 	else
 	{
-		emit operateLog(QSL("通信：推进器串口打开失败"), LogPane::err);
+		emit operateLog(QSL("通信：推进器串口打开 %1 失败").arg(propellerPort->portName()), LogPane::err);
 //		QMessageBox::critical(NULL, QStringLiteral("串口错误"), \
 //		                      QSL("推进器串口(\"%1\")打开失败，请检查它的状态。\n程序因此无法正常运行。")\
 //		                      .arg(propellerPort->portName()));
@@ -131,24 +131,24 @@ bool Communication::openPropellerPort()
 	}
 }
 
-bool Communication::openSwitchArduinoPort()
+bool Communication::openSwitchPort()
 {
-	switchArduinoPort->close();
-	switchArduinoPort->setPortName(SWITCH_ARDUINO_PORT);
-	if (switchArduinoPort->open(QIODevice::ReadWrite))
+	switchPort->close();
+	switchPort->setPortName(SWITCH_ARDUINO_PORT);
+	if (switchPort->open(QIODevice::ReadWrite))
 	{
-		switchArduinoPort->setBaudRate(QSerialPort::Baud9600);  //波特率
-		switchArduinoPort->setDataBits(QSerialPort::Data8);     //数据位
-		switchArduinoPort->setParity(QSerialPort::NoParity);    //无奇偶校验
-		switchArduinoPort->setStopBits(QSerialPort::OneStop);   //无停止位
-		switchArduinoPort->setFlowControl(QSerialPort::NoFlowControl);  //无控制
-		emit operateLog(QSL("通信：开关控制板串口打开为 %1").arg(switchArduinoPort->portName()), LogPane::info);
-		connect(switchArduinoPort, SIGNAL(readyRead()), this, SLOT(readSwitchArduinoPort()));
+		switchPort->setBaudRate(QSerialPort::Baud9600);  //波特率
+		switchPort->setDataBits(QSerialPort::Data8);     //数据位
+		switchPort->setParity(QSerialPort::NoParity);    //无奇偶校验
+		switchPort->setStopBits(QSerialPort::OneStop);   //无停止位
+		switchPort->setFlowControl(QSerialPort::NoFlowControl);  //无控制
+		emit operateLog(QSL("通信：开关控制板串口打开为 %1").arg(switchPort->portName()), LogPane::info);
+		connect(switchPort, SIGNAL(readyRead()), this, SLOT(readSwitchArduinoPort()));
 		return true;
 	}
 	else
 	{
-		emit operateLog(QSL("通信：开关控制板串口打开失败"), LogPane::err);
+		emit operateLog(QSL("通信：开关控制板串口打开 %1 失败").arg(switchPort->portName()), LogPane::err);
 		//		QApplication::beep();
 //		QMessageBox::critical(NULL, QStringLiteral("串口错误"), \
 //		                      QSL("开关控制板串口(\"%1\")打开失败，请检查它的状态。\n程序因此无法正常运行。")\
@@ -157,24 +157,24 @@ bool Communication::openSwitchArduinoPort()
 	}
 }
 
-bool Communication::openLEDArduinoPort()
+bool Communication::openLEDPort()
 {
-	LEDArduinoPort->close();
-	LEDArduinoPort->setPortName(LED_ARDUINO_PORT);
-	if (LEDArduinoPort->open(QIODevice::ReadWrite))
+	LEDPort->close();
+	LEDPort->setPortName(LED_ARDUINO_PORT);
+	if (LEDPort->open(QIODevice::ReadWrite))
 	{
-		LEDArduinoPort->setBaudRate(QSerialPort::Baud9600);  //波特率
-		LEDArduinoPort->setDataBits(QSerialPort::Data8);     //数据位
-		LEDArduinoPort->setParity(QSerialPort::NoParity);    //无奇偶校验
-		LEDArduinoPort->setStopBits(QSerialPort::OneStop);   //无停止位
-		LEDArduinoPort->setFlowControl(QSerialPort::NoFlowControl);  //无控制
-		emit operateLog(QSL("通信：LED控制板串口打开为 %1").arg(LEDArduinoPort->portName()), LogPane::info);
-		connect(LEDArduinoPort, SIGNAL(readyRead()), this, SLOT(readLEDArduinoPort()));
+		LEDPort->setBaudRate(QSerialPort::Baud9600);  //波特率
+		LEDPort->setDataBits(QSerialPort::Data8);     //数据位
+		LEDPort->setParity(QSerialPort::NoParity);    //无奇偶校验
+		LEDPort->setStopBits(QSerialPort::OneStop);   //无停止位
+		LEDPort->setFlowControl(QSerialPort::NoFlowControl);  //无控制
+		emit operateLog(QSL("通信：LED控制板串口打开为 %1").arg(LEDPort->portName()), LogPane::info);
+		connect(LEDPort, SIGNAL(readyRead()), this, SLOT(readLEDArduinoPort()));
 		return true;
 	}
 	else
 	{
-		emit operateLog(QSL("通信：LED控制板串口打开失败"), LogPane::err);
+		emit operateLog(QSL("通信：LED控制板串口打开 %1 失败").arg(LEDPort->portName()), LogPane::err);
 		//		QApplication::beep();
 //		QMessageBox::critical(NULL, QStringLiteral("串口错误"), \
 //		                      QSL("LED控制板串口(\"%1\")打开失败，请检查它的状态。\n程序因此无法正常运行。")\
@@ -183,24 +183,24 @@ bool Communication::openLEDArduinoPort()
 	}
 }
 
-bool Communication::openDepthSensorPort()
+bool Communication::openDepthPort()
 {
-	depthSensorPort->close();
-	depthSensorPort->setPortName(DEPTH_SENSOR_PORT);
-	if (depthSensorPort->open(QIODevice::ReadWrite))
+	depthPort->close();
+	depthPort->setPortName(DEPTH_SENSOR_PORT);
+	if (depthPort->open(QIODevice::ReadWrite))
 	{
-		depthSensorPort->setBaudRate(QSerialPort::Baud9600);  //波特率
-		depthSensorPort->setDataBits(QSerialPort::Data8);     //数据位
-		depthSensorPort->setParity(QSerialPort::NoParity);    //无奇偶校验
-		depthSensorPort->setStopBits(QSerialPort::OneStop);   //无停止位
-		depthSensorPort->setFlowControl(QSerialPort::NoFlowControl);  //无控制
-		emit operateLog(QSL("通信：深度传感器串口打开为 %1").arg(depthSensorPort->portName()), LogPane::info);
-		connect(depthSensorPort, &QSerialPort::readyRead, this, &Communication::readDepthSensorPort);
+		depthPort->setBaudRate(QSerialPort::Baud9600);  //波特率
+		depthPort->setDataBits(QSerialPort::Data8);     //数据位
+		depthPort->setParity(QSerialPort::NoParity);    //无奇偶校验
+		depthPort->setStopBits(QSerialPort::OneStop);   //无停止位
+		depthPort->setFlowControl(QSerialPort::NoFlowControl);  //无控制
+		emit operateLog(QSL("通信：深度传感器串口打开为 %1").arg(depthPort->portName()), LogPane::info);
+		connect(depthPort, &QSerialPort::readyRead, this, &Communication::readDepthSensorPort);
 		return true;
 	}
 	else
 	{
-		emit operateLog(QSL("通信：深度传感器机串口打开失败"), LogPane::err);
+		emit operateLog(QSL("通信：深度传感器机串口打开 %1 失败").arg(depthPort->portName()), LogPane::err);
 		//		QApplication::beep();
 //		QMessageBox::critical(NULL, QStringLiteral("串口错误"), \
 //							  QSL("深度传感器串口(\"%1\")打开失败，请检查它的状态。\n程序因此无法正常运行。")\
@@ -226,7 +226,7 @@ bool Communication::openPostureSensorPort()
 	}
 	else
 	{
-		emit operateLog(QSL("通信：姿态传感器串口打开失败"), LogPane::err);
+		emit operateLog(QSL("通信：姿态传感器串口打开 %1 失败").arg(postureSensorPort->portName()), LogPane::err);
 		//		QApplication::beep();
 //		QMessageBox::critical(NULL, QStringLiteral("串口错误"), \
 //							  QSL("姿态传感器串口(\"%1\")打开失败，请检查它的状态。\n程序因此无法正常运行。")\
@@ -436,7 +436,7 @@ void Communication::readPropellerPort()
 void Communication::readSwitchArduinoPort()
 {
 //	qDebug() << "switch arduino port:" << switchArduinoPort->readAll();
-	QByteArray temp = switchArduinoPort->readAll();
+	QByteArray temp = switchPort->readAll();
 	emit recvedMsg(QSL("开关"), temp);
 	switchArduinoRecvStr.append(temp);
 	switchArduinoDataProc(switchArduinoRecvStr);
@@ -446,7 +446,7 @@ void Communication::readLEDArduinoPort()
 {
 //	qDebug() << "readLEDArduinoPort:" << LEDArduinoPort->readAll();
 //	qDebug()<<QThread::currentThreadId();
-	QByteArray temp = LEDArduinoPort->readAll();
+	QByteArray temp = LEDPort->readAll();
 	emit recvedMsg(QSL("LED"), temp);
 	LEDArduinoRecvStr.append(temp);
 	LEDArduinoDataProc(LEDArduinoRecvStr);
@@ -455,7 +455,7 @@ void Communication::readLEDArduinoPort()
 void Communication::readDepthSensorPort()
 {
 //	qDebug() << "readDepthSensorPort:" << depthSensorPort->readAll();
-	QByteArray temp = depthSensorPort->readAll();
+	QByteArray temp = depthPort->readAll();
 	emit recvedMsg(QSL("深度"), temp);
 	depthSensorRecvStr.append(temp);
 	depthSensorDataProc(depthSensorRecvStr);

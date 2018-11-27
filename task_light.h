@@ -3,6 +3,7 @@
 
 #include "task.hpp"
 #include "normalPID.h"
+#include "Digraph.hpp"
 #include "MVGigE.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
@@ -16,12 +17,10 @@
 */
 class Task_Light : public Task
 {
+	//=====================================新建任务时，以下内容按原样复制==================================================
 public:
 	Task_Light(int period, QObject *parent = 0);
 	virtual ~Task_Light();
-
-	//新建任务时，以下内容按原样复制================
-public:
 	static QString taskName;
 
 	const unsigned int securityTimerConst = 300;//安保定时器定时时间 in second
@@ -29,20 +28,20 @@ public:
 public slots:
 	virtual void setTaskPara() Q_DECL_OVERRIDE;
 	virtual void taskSetUp() Q_DECL_OVERRIDE;//虚开始线程函数
-	virtual QString getTaskName() Q_DECL_OVERRIDE { return taskName; }//通过task指针访问子类名称时使用
+	virtual QString getTaskName() Q_DECL_OVERRIDE { return taskName; }
 
 private slots:
 	void ctrlTimerUpdate();
 
 private:
-	QString infoStr() { return QSL("任务时间：%1s\n任务状态：%2\n%3\n").arg((double)elapseTime.elapsed() / 1000).arg(taskStatus).arg(extraInfo); }
+	inline QString infoStr();
 	QString extraInfo;
 	QString taskStatus;
 	QTime elapseTime;
-	//以上内容在新建任务时原样复制，函数在cpp中添加定义
+	Digraph<int (Task_Light:: *)(const void *)> taskTgt;//邻接表表示的有向图，模板类型是以 void * 为参数，返回 int 的 Task_Light 的成员函数的 函数指针
+	unsigned int tgtDigraphIndex = 0;//当前任务目标在任务目标有向图邻接表中的索引
+	//-------------------------------新建任务时，以上内容按原样复制，注意修改构造函数名和析构函数名------------------------------------
 
-	void * (Task_Light:: *pCtrlFunc)(void *) = nullptr;
-	void * pCtrlFuncPara = 0;
 	bool isCamThreadRun = false;
 	volatile bool isDataUpdated = false;
 
@@ -50,19 +49,19 @@ private:
 	const int findTargetTurnLvConst = 50;
 
 	//控制目标函数=================================================
-	void *ctrlSetSearchDepth(void *);//定深
+	int ctrlSetSearchDepth(const void *);//设定搜索深度
 	double searchDepth = 20;
 
-	void *ctrlWaitForDepthOK(void *);
+	int ctrlWaitForDepthOK(const void *);//等待深度ok
 	unsigned int depthOKTime = 0;
 
-	void *ctrlFindTarget(void *);
+	int ctrlFindTarget(const void *);//设定寻找目标动作
 	double startYaw = 0;
 
-	void *ctrlWaitForFindTarget(void *);
+	int ctrlWaitForFindTarget(const void *);//等待找到目标
 	unsigned char roundDetect = 0;
 
-	void *ctrlChaseTarget(void *);
+	int ctrlChaseTarget(const void *);
 	NormalPID GoCtrl;//前进控制PID
 	NormalPID XAdjustCtrl;//横向控制PID
 	unsigned int shockTime = 0;
@@ -70,6 +69,8 @@ private:
 	bool isCheasingLEDSet = false;
 	bool isShockingLEDSet = false;
 	bool isOutDepthAreaOkDepthEmitted = false;//深度持续控制区外，画面中满足条件的深度已发送的标志
+
+	int ctrlEnd(const void *);
 
 	//与图像线程共享的变量=========================================
 	volatile bool isLightInSight = false;

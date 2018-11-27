@@ -76,6 +76,8 @@ private slots:
 	void on_act20Points_triggered(bool checked);
 	void on_act50Points_triggered(bool checked);
 	void on_act100Points_triggered(bool checked);
+	void on_actLogFolder_triggered();
+	void on_actRecordData_triggered(bool checked);
 };
 
 #endif // MAINWINDOW_H

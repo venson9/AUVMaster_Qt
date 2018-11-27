@@ -4,8 +4,10 @@
 #include <QColor>
 #include <QList>
 
-struct PostureData
+class PostureData
 {
+public:
+	PostureData() : yaw(0), pitch(0), roll(0), yawSpd(0), pitSpd(0), rolSpd(0) {}
 	double yaw;
 	double pitch;
 	double roll;

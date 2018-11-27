@@ -6,6 +6,8 @@
 #include "vision.h"
 #include <QMessageBox>
 #include <QDateTime>
+#include <qprocess>
+#include <QDesktopServices>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 
@@ -348,4 +350,14 @@ void MainWindow::on_act100Points_triggered(bool checked)
 	{
 		ui->act100Points->setChecked(true);
 	}
+}
+
+void MainWindow::on_actLogFolder_triggered()
+{
+	QDesktopServices::openUrl(QUrl(RECORD_DIR));
+}
+
+void MainWindow::on_actRecordData_triggered(bool checked)
+{
+	QMessageBox::information(this,QSL("%1执行了").arg(__FUNCTION__),QSL("状态是%1, 还没有写好").arg(checked),QMessageBox::Ok);
 }

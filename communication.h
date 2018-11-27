@@ -45,14 +45,14 @@ private:
 	QSerialPort *propellerPort;
 	QString propellerRecvStr;
 
-	QSerialPort *switchArduinoPort;
+	QSerialPort *switchPort;
 	QString switchArduinoRecvStr;
 
-	QSerialPort *LEDArduinoPort;
+	QSerialPort *LEDPort;
 	QString LEDArduinoRecvStr;
 	QColor LEDColor;
 
-	QSerialPort *depthSensorPort;
+	QSerialPort *depthPort;
 	QString depthSensorRecvStr;
 	QTimer *depthTimer;
 	bool isRecali = true;
@@ -62,9 +62,9 @@ private:
 	QString postureSensorRecvStr;
 
 	bool openPropellerPort();
-	bool openSwitchArduinoPort();
-	bool openLEDArduinoPort();
-	bool openDepthSensorPort();
+	bool openSwitchPort();
+	bool openLEDPort();
+	bool openDepthPort();
 	bool openPostureSensorPort();
 
 	void propellerDataProc(QString &data);//舵机控制板返回信息处理

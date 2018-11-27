@@ -25,11 +25,11 @@ public:
 	//获取以该节点为尾的第index条弧
 	DigraphArc getArc(int index)
 	{	
-		QString debug;
-		foreach (DigraphArc a, arcs) {
-			debug += ((QString)a.getArcName().data() + ",");
-		}
-		qDebug()<<debug;
+//		QString debug;
+//		foreach (DigraphArc a, arcs) {
+//			debug += (QString::fromLocal8Bit(a.getArcName().c_str()) + ",");
+//		}
+//		qDebug()<<debug;
 		if (index >= arcs.size())
 			qDebug() << "index = " << index << "but arcs.size()=" << arcs.size();
 		assert(index < arcs.size()); 

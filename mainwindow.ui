@@ -25,13 +25,22 @@
    </property>
    <widget class="QMenu" name="menuRecord">
     <property name="title">
-     <string>日志</string>
+     <string>记录</string>
     </property>
+    <addaction name="actRecordData"/>
+    <addaction name="separator"/>
+    <addaction name="actLogFolder"/>
+    <addaction name="actDataFolder"/>
    </widget>
    <widget class="QMenu" name="menuComm">
     <property name="title">
      <string>通信</string>
     </property>
+    <addaction name="actPropSetting"/>
+    <addaction name="actDepth"/>
+    <addaction name="actPosture"/>
+    <addaction name="actLED"/>
+    <addaction name="actSwitch"/>
    </widget>
    <widget class="QMenu" name="menuChart">
     <property name="title">
@@ -95,6 +104,55 @@
    </property>
    <property name="text">
     <string>100 (10points / s)</string>
+   </property>
+  </action>
+  <action name="actLogFolder">
+   <property name="text">
+    <string>打开日志文件夹</string>
+   </property>
+  </action>
+  <action name="actRecordData">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>记录数据</string>
+   </property>
+   <property name="toolTip">
+    <string>记录推进器与传感器</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actDataFolder">
+   <property name="text">
+    <string>打开数据文件夹</string>
+   </property>
+  </action>
+  <action name="actPropSetting">
+   <property name="text">
+    <string>推进器</string>
+   </property>
+  </action>
+  <action name="actDepth">
+   <property name="text">
+    <string>深度传感器</string>
+   </property>
+  </action>
+  <action name="actPosture">
+   <property name="text">
+    <string>姿态传感器</string>
+   </property>
+  </action>
+  <action name="actLED">
+   <property name="text">
+    <string>LED</string>
+   </property>
+  </action>
+  <action name="actSwitch">
+   <property name="text">
+    <string>开关</string>
    </property>
   </action>
  </widget>
